@@ -28,7 +28,13 @@ public enum AAAttribution {
             if let errorCode: AAAttributionError = .init(statusCode: Int(response.status.code)) {
                 throw errorCode
             }
-            return try response.content.decode(AAAttributionRecord.self)
+
+            let decoder = JSONDecoder()
+            let dateFormatter: DateFormatter = .init()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mmZ"
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+
+            return try response.content.decode(AAAttributionRecord.self, using: decoder)
         } catch {
             if let error = error as? Abort {
                 throw AAAttributionError.abort(error)
