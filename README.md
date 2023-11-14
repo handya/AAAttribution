@@ -22,3 +22,41 @@ import AdServices
 
 let token = try AAAttribution.attributionToken()
 ```
+
+
+
+#### Using With Vapor Queues
+
+
+```swift
+import Vapor
+import Queues
+import AAAttribution
+
+struct AttributionBody: Content {
+    let token: String
+    ...
+}
+
+struct AttributeUserInstallJob: AsyncJob {
+    typealias Payload = AttributionBody
+
+    func dequeue(_ context: QueueContext, _ payload: AttributionBody) async throws {
+        let record: AAAttributionRecord = try await AAAttribution.fetchRecord(payload.token, client: context.application.client)
+        ...
+    }
+
+    func nextRetryIn(attempt: Int) -> Int {
+        return 5
+    }
+}
+```
+
+Then dispatch a job
+
+```swift
+try await req.queue
+    .dispatch(AttributeUserInstallJob.self,
+              AttributionBody(token: "token"),
+              maxRetryCount: 3)
+```
