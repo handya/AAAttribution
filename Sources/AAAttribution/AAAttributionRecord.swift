@@ -18,3 +18,7 @@ public struct AAAttributionRecord: Codable {
     public let keywordId: Int?
     public let adId: Int?
 }
+
+// MARK: - Equatable
+
+extension AAAttributionRecord: Equatable { }

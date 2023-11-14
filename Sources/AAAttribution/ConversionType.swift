@@ -7,7 +7,15 @@
 
 import Foundation
 
-public enum ConversionType: String, Codable {
+public enum ConversionType: String {
     case download = "Download"
     case redownload = "Redownload"
 }
+
+// MARK: - Codable
+
+extension ConversionType: Codable { }
+
+// MARK: - Equatable
+
+extension ConversionType: Equatable { }
