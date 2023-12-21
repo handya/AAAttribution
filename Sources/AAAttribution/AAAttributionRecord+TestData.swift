@@ -9,10 +9,15 @@ import Foundation
 
 public extension AAAttributionRecord {
     var isTestRecord: Bool {
-        return self == .restRecord
+        return attribution == Self.testRecord.attribution
+        && orgId == Self.testRecord.orgId
+        && campaignId == Self.testRecord.campaignId
+        && adGroupId == Self.testRecord.adGroupId
+        && keywordId == Self.testRecord.keywordId
+        && adId == Self.testRecord.adId
     }
 
-    private static let restRecord: AAAttributionRecord = .init(attribution: true,
+    private static let testRecord: AAAttributionRecord = .init(attribution: true,
                                                                orgId: 1234567890,
                                                                campaignId: 1234567890,
                                                                conversionType: .download,
