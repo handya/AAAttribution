@@ -8,9 +8,9 @@
 import Vapor
 
 public enum AAAttributionError: Error {
-    case unknown
+    case unknown(Int)
     case invalidToken
-    case retry
+    case notFound
     case server
     case abort(Abort)
 
@@ -19,11 +19,26 @@ public enum AAAttributionError: Error {
         case 400:
             self = .invalidToken
         case 404:
-            self = .retry
+            self = .notFound
         case 500:
             self = .server
         default:
-            return nil
+            self = .unknown(statusCode)
+        }
+    }
+
+    public var errorDescription: String? {
+        switch self {
+        case .unknown(let code):
+            return "Unknown error code: \(code)"
+        case .invalidToken:
+            return "Invalid Token"
+        case .notFound:
+            return "Not found. The API is unable to retrieve the requested attribution record. - Retry"
+        case .server:
+            return "Apple Search Ads server is temporarily down or unreachable. - Retry"
+        case .abort(let abort):
+            return abort.errorDescription
         }
     }
 }

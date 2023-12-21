@@ -42,7 +42,7 @@ struct AttributeUserInstallJob: AsyncJob {
     typealias Payload = AttributionBody
 
     func dequeue(_ context: QueueContext, _ payload: AttributionBody) async throws {
-        let record: AAAttributionRecord = try await AAAttribution.fetchRecord(payload.token, client: context.application.client)
+        let record: AAAttributionRecord = try await context.application.attribution.fetchRecord(_ token: String)
         ...
     }
 
