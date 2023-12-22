@@ -15,6 +15,9 @@ public enum AAAttributionError: Error {
     case abort(Abort)
 
     public init?(statusCode: Int) {
+        if (200 ... 299) ~= statusCode {
+            return nil
+        }
         switch statusCode {
         case 400:
             self = .invalidToken
